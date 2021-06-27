@@ -1,0 +1,40 @@
+//Código produzido por: Matheus Gebert Straub - Disponível: https://www.usinainfo.com.br/blog/sensor-de-temperatura-arduino-ds18b20-comunicacao-onewire/
+
+#include <OneWire.h>
+#include <DallasTemperature.h>
+ 
+#define DS18B20_OneWire 2
+ 
+OneWire oneWire(DS18B20_OneWire);
+ 
+DallasTemperature sensortemp(&oneWire);
+ 
+// Endereço dos sensores DS18B20 - ALTERAR DE ACORDO COM SEU PROJETO
+uint8_t sensor1[8] = { 0x28, 0x98, 0xF9, 0x79, 0xA2, 0x00, 0x03, 0x3B };
+uint8_t sensor2[8] = { 0x28, 0x74, 0xC5, 0x79, 0xA2, 0x00, 0x03, 0xCA };
+uint8_t sensor3[8] = { 0x28, 0xFF, 0x64, 0x1D, 0xF7, 0x8A, 0x81, 0x0E };
+ 
+void setup()  {
+  sensortemp.begin(); 
+  Serial.begin(9600);
+}
+ 
+void loop() {
+  sensortemp.requestTemperatures();
+ 
+  Serial.print("Sensor 1: ");
+  valortemperatura(sensor1);
+  Serial.print("Sensor 2: ");
+  valortemperatura(sensor2);
+  Serial.print("Sensor 3: ");
+  valortemperatura(sensor3);
+ 
+  Serial.println();
+  delay(1000);
+}
+ 
+void valortemperatura(DeviceAddress deviceAddress)  {
+  float grausC = sensortemp.getTempC(deviceAddress);
+    Serial.print(grausC);
+    Serial.println("ºC");
+}
