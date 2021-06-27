@@ -1,40 +1,40 @@
 //Código produzido por: Matheus Gebert Straub - Disponível: https://www.usinainfo.com.br/blog/sensor-de-temperatura-arduino-ds18b20-comunicacao-onewire/
 
+//INCLUSÃO DAS BIBLIOTECAS
 #include <OneWire.h>
 #include <DallasTemperature.h>
  
-#define DS18B20_OneWire 2
+#define DS18B20_OneWire 2  // O sensor está conectado na porta 2
  
 OneWire oneWire(DS18B20_OneWire);
  
-DallasTemperature sensortemp(&oneWire);
- 
+DallasTemperature sensortemp(&oneWire); // Informa a referência da biblioteca oneWire para o sensor
 // Endereço dos sensores DS18B20 - ALTERAR DE ACORDO COM SEU PROJETO
 uint8_t sensor1[8] = { 0x28, 0x98, 0xF9, 0x79, 0xA2, 0x00, 0x03, 0x3B };
 uint8_t sensor2[8] = { 0x28, 0x74, 0xC5, 0x79, 0xA2, 0x00, 0x03, 0xCA };
 uint8_t sensor3[8] = { 0x28, 0xFF, 0x64, 0x1D, 0xF7, 0x8A, 0x81, 0x0E };
  
 void setup()  {
-  sensortemp.begin(); 
-  Serial.begin(9600);
+  sensortemp.begin(); // Inicia o sensor
+  Serial.begin(9600);  // Inicia a porta serial
 }
  
 void loop() {
-  sensortemp.requestTemperatures();
+  sensortemp.requestTemperatures(); // Envia o comando para realização de conversão de temperatura
  
-  Serial.print("Sensor 1: ");
+  Serial.print("Sensor 1: "); //imprime a temperatura do sensor 1 no monitor serial
   valortemperatura(sensor1);
-  Serial.print("Sensor 2: ");
+  Serial.print("Sensor 2: ");//imprime a temperatura do sensor 2 no monitor serial
   valortemperatura(sensor2);
-  Serial.print("Sensor 3: ");
+  Serial.print("Sensor 3: ");//imprime a temperatura do sensor 3 no monitor serial
   valortemperatura(sensor3);
  
-  Serial.println();
-  delay(1000);
+  Serial.println();//Imprime a temperatura
+  delay(1000); // Aguarda 1 segundo para repetir a leitura
 }
  
 void valortemperatura(DeviceAddress deviceAddress)  {
-  float grausC = sensortemp.getTempC(deviceAddress);
+  float grausC = sensortemp.getTempC(deviceAddress); //apresenta informações se o sensor for reconhecido
     Serial.print(grausC);
     Serial.println("ºC");
 }
