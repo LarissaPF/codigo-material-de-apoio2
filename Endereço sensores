@@ -1,0 +1,48 @@
+//Código produzido por: Matheus Gebert Straub - Disponível: https://www.usinainfo.com.br/blog/sensor-de-temperatura-arduino-ds18b20-comunicacao-onewire/
+
+#include <OneWire.h>
+#include <DallasTemperature.h>
+ 
+#define DS18B20_OneWire 2
+ 
+OneWire oneWire(DS18B20_OneWire);
+ 
+DallasTemperature sensortemp(&oneWire);
+ 
+DeviceAddress sensorDS18B20;
+ 
+int ndispositivos = 0;
+ 
+void setup()  {
+  sensortemp.begin(); 
+  Serial.begin(9600);
+ 
+  Serial.println("Localizando Dispositivos ...");
+  Serial.print("Encontrados ");
+  ndispositivos = sensortemp.getDeviceCount();
+  Serial.print(ndispositivos, DEC);
+  Serial.println(" dispositivos.");
+  Serial.println("");
+ 
+  Serial.println("Imprimindo Endereco");
+  for (int i = 0;  i < ndispositivos;  i++) {
+    Serial.print("Sensor ");
+    Serial.print(i+1);
+    Serial.print(": ");
+    sensortemp.getAddress(sensorDS18B20, i);
+    endereco(sensorDS18B20);
+  }
+}
+ 
+void loop() {}
+ 
+void endereco(DeviceAddress deviceAddress)  { 
+  for (uint8_t i = 0; i < 8; i++)  {
+    Serial.print("0x");
+    if (deviceAddress[i] < 0x10) Serial.print("0");
+    Serial.print(deviceAddress[i], HEX);
+    if (i < 7) Serial.print(", ");
+  }
+ 
+  Serial.println("");
+}
